@@ -1,50 +1,77 @@
 $(document).ready(function(){
   console.log('hello');
+  getVideos();
+});
+//event listeners
+// $('#add-video').on('click', function(event) {
+//   loadAddForm();
+// });
+$('#submit-video').on('click', function(event) {
+  createVideo();
+});
+// $('#edit-video').on('click', function(event) {
+//   loadEditForm();
+// });
+// $('#update-video').on('click', function(event) {
+//   editVideo();
+// });
 
-})
-
-// $('#').on('click', function(event) {
-//   createVideo();
-// })
-
-function showVideos(){
+function getVideos(){
   request('GET', '/videos', null).done(function(response) {
     console.log(response);
-    // $.each(response, function(index, value){
-    //   appendNewVideo(value);
-    })
-  };
+    $.each(response, function(index, title){
+      appendVideo(title.title, title.url, title.description) 
+    });
+  });
+};
 
-// function request(method, url, data){
-//   return $.ajax({ 
-//     method: method,
-//     url: url,
-//     dataType: 'json', 
-//     data: data
+// function loadAddForm(){}
+function appendVideo(title, url, genre, description){
+ $("<li>" + title + '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+ url +'" frameborder="0" allowfullscreen></iframe>' + genre + description + "</li>").appendTo("#video-list")
+}
+
+function createVideo() {
+  data = {
+    title: $('#new-title').val(),
+    url: $('#new-url').val(),
+    genre: $('#new-genre').val(),
+    description: $('#new-description').val()
+  }
+  $.post('/videos/new', data, function(response) {
+    console.log(response);
+    appendNewVideo(response)
+  })
+}
+
+function appendNewVideo(title, url, genre, description){
+ $("<li>" + title + '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+ url +'" frameborder="0" allowfullscreen></iframe>' + genre + description + "</li>").appendTo("#video-list")
+}
+
+// function loadEditForm(); {}
+
+// function editVideo() {
+// dataEdit = {
+//     title: $('#edit-title').val(),
+//     url: $('#edit-url').val(),
+//     genre: $('#edit-genre').val(),
+//     description: $('#edit-description').val()
+//   }
+//   $.post('/videos/:id/edit', data, function(response) {
+//     appendNewVideo(response)
 //   })
 // }
+
+function request(method, url, data){
+  return $.ajax({ 
+    method: method,
+    url: url,
+    dataType: 'json', 
+    data: data
+  })
+};
 
 // function appendNewVideo(data) {
 
 // }
-// pseudo:
 
-// get videos
-// click add
-// title, url, genre, desc
-// click submit
-// click edit
-// same fields
-// click delete
-
-// eventlisteners - click buttons - add goes to form
-// submit posts and redirects to show, edit goes to form, submit puts and redirects to ?, delete deletes.
-
-// append title, iframe with url, genre and desc
-
-// append form 
-
-// Create event listeners to trigger the Ajax requests. (there is no need for forms to have a 'method: get/post' anymore.)
-// * When adding a video, add it first to the database, then append it to the page 
-// * When editing a video, update it first in the database, then update the page with the new values (no refresh!)
-// * When deleting a video, delete it first from the database, then remove it from the page
+// * When adding, editing, deleting a video, first to the database, then append to/update on/remove from the page 

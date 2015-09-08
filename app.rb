@@ -19,23 +19,23 @@ get '/videos' do
   end
 end
 
-post '/videos' do
-  binding.pry 
-  sql = "insert into videos (title, url, genre, description) values ('#{title}', '#{url}', #{genre}, #{description}) returning *" 
+post '/videos/new' do
+  # binding.pry 
+  sql = "insert into videos (title, url, genre, description) values ('#{title}', '#{url}', '#{genre}', '#{description}') returning *"
   video = run_sql(sql)
   if request.xhr?
     json videos.first
   end
 end
 
-put '/videos:id' do
+# put '/videos/:id/edit' do
 
-  sql = "update videos = '#{params[]}' where id = #{params[:id]}" #in first[]?
-  @video = run_sql(sql)
-  if request.xhr?
-    json videos.first #?
-  end
-end
+#   sql = "update videos = '#{params[]}' where id = #{params[:id]}" #in first[]?
+#   @video = run_sql(sql)
+#   if request.xhr?
+#     json videos.first #?
+#   end
+# end
 
 private 
 def run_sql(sql)
